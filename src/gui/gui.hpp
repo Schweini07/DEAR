@@ -38,9 +38,9 @@ private:
     tgui::PanelListBox::Ptr extracted_files_panel_list_box;
     tgui::Button::Ptr repack_files_button;
 
-    tgui::String dict_file_path = "/home/laurenz/Dokumente/Programmieren/3DS-Modding/DarkMoon/Tools/data_extractor/resources/data_and_dict_files/mansione_kingboo/kingboo.dict";
-    tgui::String data_file_path = "/home/laurenz/Dokumente/Programmieren/3DS-Modding/DarkMoon/Tools/data_extractor/resources/data_and_dict_files/mansione_kingboo/kingboo.data";
-    tgui::String destination_directory_path = "/home/laurenz/Dokumente/Programmieren/3DS-Modding/DarkMoon/Tools/data_extractor/data_and_dict_files/kingboo/";
+    tgui::String dict_file_path;
+    tgui::String data_file_path;
+    tgui::String destination_directory_path;
 
 
     std::unique_ptr<DictDataManager> dict_data_manager;

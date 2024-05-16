@@ -4,6 +4,7 @@
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/texture_metadata_file.hpp"
 #include "extracted_files/mixed_data_file.hpp"
+#include <iostream>
 
 GUI::GUI()
 {
@@ -13,6 +14,14 @@ GUI::GUI()
 void GUI::StartApplication()
 {
     sf::RenderWindow window(sf::VideoMode(960, 540), "Luigi's Mansion Data Extractor");
+    
+    sf::Image image = sf::Image();
+    if (!image.loadFromFile("resources/images/icon.png"))
+    {
+        std::cerr << "Unable to load window icon.\n";
+    }
+    window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+
     gui = std::make_unique<tgui::Gui>(window);
     tgui::Theme::setDefault("resources/themes/Dark.txt");
 
