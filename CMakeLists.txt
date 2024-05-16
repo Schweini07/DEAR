@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project (DataExtractor)
+project (DEAR)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
@@ -47,7 +47,7 @@ endif()
 include_directories(src)
 include_directories(lib)
 
-add_executable(data_extractor
+add_executable(DEAR
 src/main.cpp
 src/dict_data_manager.cpp
 
@@ -64,8 +64,8 @@ src/gui/gui.cpp
 
 src/utils/FileSystemDirectoryHandler.cpp
 )
-target_link_libraries(data_extractor Binary-Reader)
-target_link_libraries(data_extractor tgui)
-target_link_libraries(data_extractor ZLIB::ZLIB)
+target_link_libraries(DEAR Binary-Reader)
+target_link_libraries(DEAR tgui)
+target_link_libraries(DEAR ZLIB::ZLIB)
 
 add_subdirectory(lib/Binary-Reader)

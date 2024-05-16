@@ -13,7 +13,7 @@ GUI::GUI()
 
 void GUI::StartApplication()
 {
-    sf::RenderWindow window(sf::VideoMode(960, 540), "Luigi's Mansion Data Extractor");
+    sf::RenderWindow window(sf::VideoMode(960, 540), "Data Extractor and Repacker");
     
     sf::Image image = sf::Image();
     if (!image.loadFromFile("resources/images/icon.png"))
