@@ -1,0 +1,214 @@
+Renderer.1 {
+}
+
+Renderer.2 {
+}
+
+Renderer.3 {
+    BorderColor = rgb(75,75,75);
+    ScrollbarWidth = 16;
+    TextColor = White;
+    TextureBackground = None;
+
+    Scrollbar {
+        ArrowBackgroundColor = rgb(25,25,25);
+        ArrowBackgroundColorHover = rgb(50,50,50);
+        ArrowColor = White;
+        ArrowColorHover = White;
+        TextureArrowDown = None;
+        TextureArrowDownHover = None;
+        TextureArrowUp = None;
+        TextureArrowUpHover = None;
+        TextureThumb = None;
+        TextureThumbHover = None;
+        TextureTrack = None;
+        TextureTrackHover = None;
+        ThumbColor = rgb(50,50,50);
+        ThumbColorHover = rgb(55,55,55);
+        TrackColor = rgb(25,25,25);
+    }
+}
+
+Renderer.4 {
+    BackgroundColor = rgb(40,40,40);
+    BackgroundColorDisabled = rgb(20,20,20);
+    BackgroundColorDown = rgb(115,115,115);
+    BackgroundColorDownHover = rgb(125,125,125);
+    BackgroundColorHover = rgb(65,65,65);
+    BorderColor = rgb(75,75,75);
+    BorderColorDisabled = rgb(55,55,55);
+    BorderColorDown = rgb(135,135,135);
+    BorderColorFocused = rgb(120,120,120);
+    BorderColorHover = rgb(100,100,100);
+    Borders = (1);
+    RoundedBorderRadius = 4;
+    TextColor = White;
+    TextColorDisabled = rgb(155,155,155);
+    TextColorDown = White;
+    TextColorHover = White;
+    Texture = None;
+    TextureDisabled = None;
+    TextureDown = None;
+    TextureDownFocused = None;
+    TextureDownHover = None;
+    TextureFocused = None;
+    TextureHover = None;
+}
+
+HorizontalLayout.DictAndDataLayout {
+    Ratios = [1, 1];
+    Renderer = &1;
+    Size = (960, 540);
+
+    VerticalLayout.DictAndDataExtractionLayout {
+        Ratios = [1, 1, 1, 1];
+        Renderer = &2;
+        Size = (480, 540);
+
+        HorizontalLayout.LoadDictLayout {
+            Ratios = [1, 1];
+            Renderer = &1;
+            Size = (480, 135);
+
+            Label.LoadDictLabel {
+                HorizontalAlignment = Center;
+                Renderer = &3;
+                Size = (240, 135);
+                Text = "Dict file";
+                TextSize = 13;
+                VerticalAlignment = Center;
+            }
+
+            Button.LoadDictButton {
+                Position = (240, 0);
+                Renderer = &4;
+                Size = (240, 135);
+                Text = "No .dict loaded...";
+                TextSize = 13;
+            }
+        }
+
+        HorizontalLayout.LoadDataLayout {
+            Position = (0, 135);
+            Ratios = [1, 1];
+            Renderer = &1;
+            Size = (480, 135);
+
+            Label.LoadDataLabel {
+                HorizontalAlignment = Center;
+                Renderer = &3;
+                Size = (240, 135);
+                Text = "Data file";
+                TextSize = 13;
+                VerticalAlignment = Center;
+            }
+
+            Button.LoadDataButton {
+                Position = (240, 0);
+                Renderer = &4;
+                Size = (240, 135);
+                Text = "No .data loaded...";
+                TextSize = 13;
+            }
+        }
+
+        HorizontalLayout.DirectoryPath {
+            Position = (0, 270);
+            Ratios = [1, 1];
+            Renderer = &1;
+            Size = (480, 135);
+
+            EditBox.DirectoryPathEditBox {
+                Size = (240, 135);
+                TextSize = 13;
+
+                Renderer {
+                    BackgroundColor = rgb(40,40,40);
+                    BackgroundColorDisabled = rgb(20,20,20);
+                    BackgroundColorHover = rgb(65,65,65);
+                    BorderColor = rgb(75,75,75);
+                    Borders = (1);
+                    CaretColor = White;
+                    CaretWidth = 1;
+                    DefaultTextColor = rgb(155,155,155);
+                    Padding = 0;
+                    SelectedTextBackgroundColor = rgb(85,85,85);
+                    SelectedTextColor = White;
+                    TextColor = White;
+                    TextColorDisabled = rgb(155,155,155);
+                    Texture = None;
+                    TextureDisabled = None;
+                    TextureFocused = None;
+                    TextureHover = None;
+                }
+            }
+
+            Button.DirectoryPathButton {
+                Position = (240, 0);
+                Renderer = &4;
+                Size = (240, 135);
+                Text = "Choose directory...";
+                TextSize = 13;
+            }
+        }
+
+        Button.StartExtractionButton {
+            Position = (0, 405);
+            Renderer = &4;
+            Size = (480, 135);
+            Text = "Start Extraction";
+            TextSize = 13;
+        }
+    }
+
+    VerticalLayout.ExtractedFilesLayout {
+        Position = (480, 0);
+        Ratios = [1, 1];
+        Renderer = &2;
+        Size = (480, 540);
+
+        PanelListBox.ExtractedFilesPanelListBox {
+            ContentSize = (0, 0);
+            HorizontalScrollbarPolicy = Never;
+            ItemsHeight = 40;
+            ItemsWidth = 480;
+            MaximumItems = 0;
+            Size = (480, 270);
+
+            Renderer {
+                BackgroundColor = rgb(40,40,40);
+                BorderColor = rgb(75,75,75);
+                Borders = (1);
+                RoundedBorderRadius = 4;
+                ScrollbarWidth = 16;
+                TextureBackground = None;
+
+                Scrollbar {
+                    ArrowBackgroundColor = rgb(25,25,25);
+                    ArrowBackgroundColorHover = rgb(50,50,50);
+                    ArrowColor = White;
+                    ArrowColorHover = White;
+                    TextureArrowDown = None;
+                    TextureArrowDownHover = None;
+                    TextureArrowUp = None;
+                    TextureArrowUpHover = None;
+                    TextureThumb = None;
+                    TextureThumbHover = None;
+                    TextureTrack = None;
+                    TextureTrackHover = None;
+                    ThumbColor = rgb(50,50,50);
+                    ThumbColorHover = rgb(55,55,55);
+                    TrackColor = rgb(25,25,25);
+                }
+            }
+        }
+
+        Button.RepackFilesButton {
+            Position = (0, 270);
+            Renderer = &4;
+            Size = (480, 270);
+            Text = "Repack Files";
+            TextSize = 13;
+        }
+    }
+}
