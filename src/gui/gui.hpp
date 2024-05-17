@@ -18,6 +18,8 @@ public:
     void StartApplication();
 
 private:
+    void LoadWindowIcon();
+
     void LoadMainForm();
     void InitExtractedFilesPanelListBox(const std::vector<FileSection> &extracted_files);
     void HandleStartExtractionButtonState();
@@ -26,8 +28,14 @@ private:
     void ExtractTexture(FileTableEntry &texture_entry, TextureMetaData texture_metadata, std::string mixed_data_file_path);
 
 private:
+    std::unique_ptr<sf::RenderWindow> window;
+    sf::VideoMode window_size {960, 540};
+    sf::String window_title = "Data Extractor and Repacker";
+    std::string window_icon_path = "resources/images/icon.png";
+
     std::unique_ptr<tgui::Gui> gui;
     tgui::Theme dark_theme;
+
 
     tgui::Button::Ptr load_dict_button;
     tgui::Button::Ptr load_data_button;

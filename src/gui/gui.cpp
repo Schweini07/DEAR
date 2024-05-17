@@ -1,10 +1,8 @@
 #include "gui.hpp"
-
 #include "file_formats/texture.hpp"
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/texture_metadata_file.hpp"
 #include "extracted_files/mixed_data_file.hpp"
-#include <iostream>
 
 GUI::GUI()
 {
@@ -13,44 +11,55 @@ GUI::GUI()
 
 void GUI::StartApplication()
 {
-    sf::RenderWindow window(sf::VideoMode(960, 540), "Data Extractor and Repacker");
-    
-    sf::Image image = sf::Image();
-    if (!image.loadFromFile("resources/images/icon.png"))
-    {
-        std::cerr << "Unable to load window icon.\n";
-    }
-    window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+    window = std::make_unique<sf::RenderWindow>(window_size, window_title);
+    LoadWindowIcon();
 
-    gui = std::make_unique<tgui::Gui>(window);
+    gui = std::make_unique<tgui::Gui>(*window);
+    gui->onViewChange([this] {
+        const float CURRENT_SCREEN_HEIGHT = gui->getView().getRect().height;
+
+        gui->setTextSize(static_cast<unsigned int>(13.f * (CURRENT_SCREEN_HEIGHT / window_size.height)));
+        //tgui::getBackend()->setFontScale(CURRENT_SCREEN_HEIGHT / static_cast<float>(window_size.height));
+    });
+
     tgui::Theme::setDefault("resources/themes/Dark.txt");
 
     LoadMainForm(); 
 
-    while (window.isOpen())
+    while (window->isOpen())
     {
         sf::Event event;
 
-        while (window.pollEvent(event))
+        while (window->pollEvent(event))
         {
             gui->handleEvent(event);
 
             if (event.type == sf::Event::Closed)
-                window.close();
+                window->close();
         }
 
-        window.clear();
+        window->clear();
 
         gui->draw();
 
-        window.display();
+        window->display();
     }
+}
+
+void GUI::LoadWindowIcon()
+{
+    sf::Image image = sf::Image();
+    if (!image.loadFromFile(window_icon_path))
+    {
+        std::cerr << "Unable to load window icon.\n";
+    }
+
+    window->setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
 }
 
 void GUI::LoadMainForm()
 {
     gui->loadWidgetsFromFile("resources/forms/main_form.txt");
-
     load_dict_button = gui->get<tgui::Button>("LoadDictButton");
     load_dict_button->onPress([this] {
         tgui::FileDialog::Ptr file_dialog = tgui::FileDialog::create("Select .dict file", "Select", false);
