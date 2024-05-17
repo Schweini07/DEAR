@@ -16,19 +16,38 @@ struct FileSection
     std::string file_path;
 };
 
+struct FileTableReference
+{
+    uint32_t hash;
+    std::vector<uint8_t> file_indices;
+};
+
+struct DictHeader
+{
+    uint32_t identifier = 0xA9F32458;
+    uint16_t header_flags;
+    uint8_t compression_flag;
+    uint8_t padding_1;
+    uint32_t file_count;
+    uint32_t largest_compressed_file_size;
+    uint8_t file_table_count;
+    uint8_t padding_2;
+    uint8_t file_table_reference_count;
+    uint8_t file_extension_count;
+
+    std::vector<FileTableReference> file_table_references;
+};
+
 class Dict
 {
 public:
     Dict(std::string file_path = "");
     ~Dict() = default;
 
-    void Parse(std::string file_path = "");
+    void Parse();
+    void Write();
 
-    uint32_t identifier = 0xA9F32458;
-    uint16_t header_flags;
-    uint8_t compression_flag;
-    uint32_t file_count;
-    uint32_t largest_compressed_file;
+    DictHeader header;
     std::vector<FileSection> file_array;
 
 private:

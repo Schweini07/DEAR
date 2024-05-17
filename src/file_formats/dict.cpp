@@ -7,42 +7,48 @@ Dict::Dict(std::string file_path) : file_path(file_path)
 {
 }
 
-void Dict::Parse(std::string file_path)
+void Dict::Parse()
 {
-    if ("" == file_path)
-        file_path = this->file_path;
-
     BinaryReaderFile reader(file_path);
 
-    if (identifier != reader.readUInt32())
+    if (header.identifier != reader.readUInt32())
     {
         std::cerr << "File does not contain correct identifier\n";
         return;
     }
 
-    header_flags = reader.readUInt16();
-    compression_flag = reader.readUInt8();
-    reader.readUInt8(); // 1 byte padding
-    file_count = reader.readUInt32();
-    largest_compressed_file = reader.readUInt32();
+    header.header_flags = reader.readUInt16();
+    header.compression_flag = reader.readUInt8();
+    header.padding_1 = reader.readUInt8(); // 1 byte padding
+    header.file_count = reader.readUInt32();
+    header.largest_compressed_file_size = reader.readUInt32();
+    header.file_table_count = reader.readUInt8();
+    header.padding_2 = reader.readUInt8();
+    header.file_table_reference_count = reader.readUInt8();
+    header.file_extension_count = reader.readUInt8();
 
-    std::cout << unsigned(compression_flag) << " | " << file_count << " | " << largest_compressed_file << "\n"; 
+    std::cout << unsigned(header.compression_flag) << " | " << header.file_count << " | " << header.largest_compressed_file_size << "\n"; 
 
     std::cout << "=========================\n";
 
-    reader.seek(0x2b, std::ios_base::beg); // skip unknown portion of the dict
+    for (uint8_t i = 0; i < header.file_table_reference_count; i++)
+    {
+        FileTableReference file_table_reference;
+        file_table_reference.hash = reader.readUInt32();
+        
+        for (uint8_t j = 0; j < 8; j++)
+            file_table_reference.file_indices.push_back(reader.readUInt8());
+    }
 
-    for (size_t i = 0; i < file_count; i++)
+    for (uint8_t i = 0; i < header.file_count; i++)
     {
         FileSection data_file;
         data_file.id = i;
         data_file.unknown = reader.readUInt8();
         file_array.push_back(data_file);
     }
-
-    reader.readUInt8(); // 1 byte padding
     
-    for (size_t i = 0; i < file_count; i++)
+    for (uint8_t i = 0; i < header.file_count; i++)
     {
         file_array[i].offset =  reader.readUInt32();
         file_array[i].decompressed_file_length =  reader.readUInt32();
@@ -51,4 +57,10 @@ void Dict::Parse(std::string file_path)
 
         std::cout << file_array[i].offset << " | " << file_array[i].decompressed_file_length << " | " << file_array[i].compressed_file_length << "\n";
     }
+}
+
+void Dict::Write()
+{
+    std::ofstream dict_file(file_path);
+
 }

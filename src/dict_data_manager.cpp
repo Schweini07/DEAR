@@ -37,7 +37,7 @@ void DictDataManager::ParseDict()
 {
     dict->Parse();
     
-    is_compressed = dict->compression_flag;
+    is_compressed = dict->header.compression_flag;
 }
 
 void DictDataManager::ExtractDataBufferToFile(FileSection &file_section)
@@ -70,7 +70,7 @@ void DictDataManager::RepackFile(std::vector<uint8_t> &data_file_data, const Fil
     std::vector<uint8_t> file_data;
     file_data.resize(file_section.decompressed_file_length);
 
-    std::ifstream extracted_file(file_section.file_path);
+    std::ifstream extracted_file(file_section.file_path, std::ios::binary);
     extracted_file.read(reinterpret_cast<char *>(file_data.data()), file_section.decompressed_file_length);
     extracted_file.close();
 
