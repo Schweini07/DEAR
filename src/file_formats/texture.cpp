@@ -50,7 +50,7 @@ void Texture::Save(std::string file_path)
         alpha);
     std::cout << decoded_data.size() << " " << sizeof(decoded_data_buffer)/sizeof(decoded_data_buffer[0]) << "\n";
 
-    std::ofstream texture_file(file_path);
+    std::ofstream texture_file(file_path, std::ios::binary);
     texture_file.write(decoded_data.data(), width*height*4);
     texture_file.close();
 

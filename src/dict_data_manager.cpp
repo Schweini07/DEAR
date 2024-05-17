@@ -28,7 +28,7 @@ void DictDataManager::RepackFiles()
     for (const FileSection &file_section : dict->file_array)
         RepackFile(data_file_data, file_section);
     
-    std::ofstream repacked_file(destination_directory_path + "repacked.data");
+    std::ofstream repacked_file(destination_directory_path + "repacked.data", std::ios::binary);
     repacked_file.write(reinterpret_cast<char *>(data_file_data.data()), data_file_data.size());
     repacked_file.close();
 }
@@ -54,7 +54,7 @@ void DictDataManager::ExtractDataBufferToFile(FileSection &file_section)
     dir_handler.CreateDirectory(destination_directory_path.c_str());
     file_section.file_path = destination_directory_path + "file" + std::to_string(file_section.id);
 
-    std::ofstream extracted_file(file_section.file_path);
+    std::ofstream extracted_file(file_section.file_path, std::ios::binary);
     extracted_file.write(reinterpret_cast<char *>(data_buffer.data()), file_section.decompressed_file_length);
     extracted_file.close();
 }

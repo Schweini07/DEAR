@@ -8,7 +8,7 @@
 
 Data::Data(std::string file_path) : file_path(file_path)
 {
-    std::ifstream data_file(file_path, std::ifstream::ate);
+    std::ifstream data_file(file_path, std::ios::ate | std::ios::binary);
     file_size = data_file.tellg();
     data_file.close();
 
@@ -19,7 +19,7 @@ void Data::GetDataBuffer(std::vector<uint8_t> &data_buffer, uint32_t offset, uin
 {
     data_buffer.resize(buffer_size);
 
-    std::ifstream data_file(file_path);
+    std::ifstream data_file(file_path, std::ios::binary);
 
     data_file.seekg(offset);
     data_file.read(reinterpret_cast<char *>(data_buffer.data()), buffer_size);
