@@ -7,11 +7,14 @@
 struct FileSection
 {
     uint8_t id;
-    uint8_t unknown;
+    uint8_t unknown_1;
     uint32_t offset;
     uint32_t decompressed_file_length;
     uint32_t compressed_file_length;
-    uint32_t flags;
+    uint8_t type;
+    uint8_t padding;
+    uint8_t file_extension;
+    uint8_t unknown_2;
 
     std::string file_path;
 };

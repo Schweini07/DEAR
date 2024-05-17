@@ -44,7 +44,7 @@ void Dict::Parse()
     {
         FileSection data_file;
         data_file.id = i;
-        data_file.unknown = reader.readUInt8();
+        data_file.unknown_1 = reader.readUInt8();
         file_array.push_back(data_file);
     }
     
@@ -53,7 +53,10 @@ void Dict::Parse()
         file_array[i].offset =  reader.readUInt32();
         file_array[i].decompressed_file_length =  reader.readUInt32();
         file_array[i].compressed_file_length =  reader.readUInt32();
-        file_array[i].flags =  reader.readUInt32();
+        file_array[i].type =  reader.readUInt8();
+        file_array[i].padding =  reader.readUInt8();
+        file_array[i].file_extension =  reader.readUInt8();
+        file_array[i].unknown_2 =  reader.readUInt8();
 
         std::cout << file_array[i].offset << " | " << file_array[i].decompressed_file_length << " | " << file_array[i].compressed_file_length << "\n";
     }
