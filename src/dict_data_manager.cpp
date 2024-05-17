@@ -61,9 +61,6 @@ void DictDataManager::ExtractDataBufferToFile(FileSection &file_section)
 
 void DictDataManager::RepackFile(std::vector<uint8_t> &data_file_data, const FileSection &file_section)
 {
-    if (0 == file_section.decompressed_file_length)
-        return;
-
     // 0x1 is a debug file, which we do not want to repack
     if (0x1 == file_section.file_extension)
         return;
