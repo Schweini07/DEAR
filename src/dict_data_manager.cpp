@@ -1,9 +1,10 @@
 #include "dict_data_manager.hpp"
-
+#include <iostream>
 #include "utils/FileSystemDirectoryHandler.hpp"
 #include <fstream>
 #include <algorithm>
 #include <zlib.h>
+#include <filesystem>
 
 DictDataManager::DictDataManager(std::string dict_path, std::string data_path, std::string destination_directory_path)
 : destination_directory_path(destination_directory_path)
@@ -25,12 +26,14 @@ void DictDataManager::RepackFiles()
     std::vector<uint8_t> data_file_data;
     data_file_data.resize(data->GetFileSize());
 
-    for (const FileSection &file_section : dict->file_array)
+    for (FileSection &file_section : dict->file_array)
         RepackFile(data_file_data, file_section);
     
     std::ofstream repacked_file(destination_directory_path + "repacked.data", std::ios::binary);
     repacked_file.write(reinterpret_cast<char *>(data_file_data.data()), data_file_data.size());
     repacked_file.close();
+
+    dict->Write(destination_directory_path + "repacked.dict");
 }
 
 void DictDataManager::ParseDict()
@@ -59,7 +62,7 @@ void DictDataManager::ExtractDataBufferToFile(FileSection &file_section)
     extracted_file.close();
 }
 
-void DictDataManager::RepackFile(std::vector<uint8_t> &data_file_data, const FileSection &file_section)
+void DictDataManager::RepackFile(std::vector<uint8_t> &data_file_data, FileSection &file_section)
 {
     // 0x1 is a debug file, which we do not want to repack
     if (0x1 == file_section.file_extension)

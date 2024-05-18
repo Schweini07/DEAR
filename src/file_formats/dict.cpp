@@ -38,13 +38,17 @@ void Dict::Parse()
         
         for (uint8_t j = 0; j < 8; j++)
             file_table_reference.file_indices.push_back(reader.readUInt8());
+        
+        header.file_table_references.push_back(file_table_reference);
     }
 
     for (uint8_t i = 0; i < header.file_count; i++)
     {
         FileSection data_file;
+
         data_file.id = i;
         data_file.unknown_1 = reader.readUInt8();
+
         file_array.push_back(data_file);
     }
     
@@ -62,8 +66,31 @@ void Dict::Parse()
     }
 }
 
-void Dict::Write()
+void Dict::Write(std::string new_dict_path)
 {
-    std::ofstream dict_file(file_path);
+    std::ofstream dict_file(new_dict_path, std::ios::binary);
 
+    dict_file.write(reinterpret_cast<char *>(&header), 0x14);
+
+    for (const FileTableReference &file_table_reference : header.file_table_references)
+    {
+        dict_file.write(reinterpret_cast<const char *>(&(file_table_reference.hash)), 0x4);
+
+        for (const uint8_t &file_index : file_table_reference.file_indices)
+            dict_file.write(reinterpret_cast<const char *>(&file_index), 0x1);
+    }
+
+    for (const FileSection &file_section : file_array)
+        dict_file.write(reinterpret_cast<const char *>(&file_section), 0x1);
+    
+    for (const FileSection &file_section : file_array)
+        dict_file.write(reinterpret_cast<const char *>(&file_section.offset), 0x10);
+
+    dict_file.write(".data", 5);
+    dict_file.put(0);
+
+    dict_file.write(".debug", 6);
+    dict_file.put(0);
+    
+    dict_file.close();
 }

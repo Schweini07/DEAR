@@ -18,7 +18,7 @@ public:
 private:
     void ParseDict();
     void ExtractDataBufferToFile(FileSection &file_section);
-    void RepackFile(std::vector<uint8_t> &data_file_data, const FileSection &file_section);
+    void RepackFile(std::vector<uint8_t> &data_file_data, FileSection &file_section);
     std::vector<uint8_t> CompressDataBuffer(const std::vector<uint8_t> &decompressed_buffer, uint32_t compressed_size);
     std::vector<uint8_t> DecompressDataBuffer(const std::vector<uint8_t> &compressed_buffer, uint32_t decompressed_size);
 
