@@ -40,6 +40,19 @@ void FileTable::Parse()
     }
 }
 
+void FileTable::Write(std::string new_file_path)
+{
+    std::ofstream file_table_file(new_file_path, std::ios::binary);
+
+    for (const FileEntry &file_entry : file_entries)
+        WriteFileEntry(file_entry, file_table_file);
+    
+    for (const FileData &data : file_data)
+        WriteFileData(data, file_table_file);
+
+    file_table_file.close();
+}
+
 void FileTable::ParseFileEntry(BinaryReaderFile &reader, uint32_t &current_index)
 {
     FileEntry file_entry;
@@ -95,4 +108,17 @@ void FileTable::ParseFileData(BinaryReaderFile &reader, uint32_t &current_index)
     << "Data offset: " << data.flags_3 << "\n"
     << "Has Children: " << data.has_children << "\n"
     << "Index: " << unsigned(data.dict_index) << "\n\n";
+}
+
+void FileTable::WriteFileEntry(const FileEntry &file_entry, std::ofstream &file_table_file)
+{
+    uint32_t identifier = file_entry.identifier;
+    file_table_file.write(reinterpret_cast<char *>(&identifier), 4);
+    file_table_file.write(reinterpret_cast<const char *>(&file_entry.file_header_size), 8);
+    file_table_file.write(reinterpret_cast<const char *>(&file_entry.type), 12);
+}
+
+void FileTable::WriteFileData(const FileData &data, std::ofstream &file_table_file)
+{
+    file_table_file.write(reinterpret_cast<const char *>(&data), 12);
 }

@@ -41,6 +41,7 @@ public:
     ~FileTable() = default;
 
     void Parse();
+    void Write(std::string new_file_path);
 
     std::vector<FileData *> global_data;
 
@@ -51,6 +52,9 @@ public:
 private:
     void ParseFileEntry(BinaryReaderFile &reader, uint32_t &current_index);
     void ParseFileData(BinaryReaderFile &reader, uint32_t &current_index);
+
+    void WriteFileEntry(const FileEntry &file_entry, std::ofstream &file_table_file);
+    void WriteFileData(const FileData &data, std::ofstream &file_table_file);
 
     std::string file_path;
 };

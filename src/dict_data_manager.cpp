@@ -43,6 +43,8 @@ void DictDataManager::RepackFiles()
     repacked_file.close();
 
     dict->Write(destination_directory_path + "repacked.dict");
+
+    file_table->Write(destination_directory_path + "repacked.file_table");
 }
 
 void DictDataManager::ParseDict()
