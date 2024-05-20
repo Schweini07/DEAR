@@ -182,7 +182,7 @@ void GUI::ExtractFiles()
 
 void GUI::ExtractTexture(FileTableEntry &texture_entry, TextureMetaData texture_metadata, std::string mixed_data_file_path)
 {
-    MixedDataFile mixed_data_file(mixed_data_file_path);
+/*     MixedDataFile mixed_data_file(mixed_data_file_path);
 
     Texture texture(
         mixed_data_file.GetDataBuffer(texture_entry.offset, texture_entry.length),
@@ -192,5 +192,5 @@ void GUI::ExtractTexture(FileTableEntry &texture_entry, TextureMetaData texture_
     );
 
     texture.DecodeETC1();
-    texture.Save(mixed_data_file_path + std::to_string(texture_metadata.hash));
+    texture.Save(mixed_data_file_path + std::to_string(texture_metadata.hash)); */
 }

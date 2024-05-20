@@ -1,10 +1,11 @@
 #include "dict_data_manager.hpp"
-#include <iostream>
-#include "utils/FileSystemDirectoryHandler.hpp"
+
 #include <fstream>
 #include <algorithm>
 #include <zlib.h>
 #include <filesystem>
+#include "utils/FileSystemDirectoryHandler.hpp"
+
 
 DictDataManager::DictDataManager(std::string dict_path, std::string data_path, std::string destination_directory_path)
 : destination_directory_path(destination_directory_path)
@@ -19,6 +20,14 @@ void DictDataManager::ExtractFiles()
 
     for (FileSection &file_section : dict->file_array)
         ExtractDataBufferToFile(file_section);
+    
+    file_table = std::make_unique<FileTable>(dict->file_array[0].file_path);
+    file_table->Parse();
+
+    mixed_data_file = std::make_unique<MixedDataFile>(dict->file_array[3].file_path);
+    mixed_data_file->ParseFileTable(*file_table);
+
+    ExtractMixedData();
 }
 
 void DictDataManager::RepackFiles()
@@ -60,6 +69,46 @@ void DictDataManager::ExtractDataBufferToFile(FileSection &file_section)
     std::ofstream extracted_file(file_section.file_path, std::ios::binary);
     extracted_file.write(reinterpret_cast<char *>(data_buffer.data()), file_section.decompressed_file_length);
     extracted_file.close();
+}
+
+void DictDataManager::ExtractMixedData()
+{
+    FileSystemDirectoryHandler dir_handler;
+    std::string file_table_path = destination_directory_path + "file_table/";
+    dir_handler.CreateDirectory(file_table_path.c_str());
+
+    for (const FileData &data : file_table->file_entries)
+    {
+        std::stringstream type;
+        type << std::hex << data.type << std::dec << "-" << data.flags_3;
+
+        std::ofstream file(file_table_path + type.str(), std::ios::binary);
+        file.write(reinterpret_cast<const char *>(data.data.data()), data.data.size());
+        file.close();
+
+        if (!data.has_children)
+            continue;
+        
+        ExtractDataChildren(data, file_table_path);
+    }
+}
+
+void DictDataManager::ExtractDataChildren(const FileData &file_data, const std::string &file_table_path)
+{
+    for (FileData *data : file_data.children)
+    {
+        std::stringstream type;
+        type << std::hex << data->type << std::dec << "-" << data->flags_3;
+
+        std::ofstream file(file_table_path + type.str(), std::ios::binary);
+        file.write(reinterpret_cast<const char *>(data->data.data()), data->data.size());
+        file.close();
+
+        if (!data->has_children)
+            continue;
+        
+        ExtractDataChildren(*data, file_table_path);
+    }
 }
 
 void DictDataManager::RepackFile(std::vector<uint8_t> &data_file_data, FileSection &file_section)
