@@ -23,7 +23,7 @@ public:
     TextureMetaDataFile(std::string file_path = "");
     ~TextureMetaDataFile() = default;
 
-    void Parse(std::string file_path = "");
+    void Parse();
 
     std::vector<TextureMetaData> texture_metadata;
 

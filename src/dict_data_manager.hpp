@@ -4,6 +4,8 @@
 #include "file_formats/data.hpp"
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/mixed_data_file.hpp"
+#include "extracted_files/texture_metadata_file.hpp"
+#include "texture_manager.hpp"
 #include <string>
 #include <memory>
 #include <vector>
@@ -23,6 +25,7 @@ private:
     void ExtractDataBufferToFile(FileSection &file_section);
     void ExtractMixedData();
     void ExtractDataChildren(const FileData &file_data, const std::string &file_table_path);
+    void ExtractTextures();
 
     void RepackFile(std::vector<uint8_t> &data_file_data, FileSection &file_section);
 
@@ -33,6 +36,8 @@ private:
     std::unique_ptr<Data> data;
     std::unique_ptr<FileTable> file_table;
     std::unique_ptr<MixedDataFile> mixed_data_file;
+    std::unique_ptr<TextureMetaDataFile> texture_metadata_file;
+    std::unique_ptr<TextureManager> texture_manager;
 
     bool is_compressed;
 

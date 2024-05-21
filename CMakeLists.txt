@@ -50,6 +50,7 @@ include_directories(lib)
 add_executable(DEAR
 src/main.cpp
 src/dict_data_manager.cpp
+src/texture_manager.cpp
 
 src/file_formats/dict.cpp
 src/file_formats/data.cpp

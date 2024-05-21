@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iostream>
 
-Texture::Texture(std::vector<char> texture_data, uint16_t width, uint16_t height, bool alpha)
+Texture::Texture(std::vector<uint8_t> texture_data, uint16_t width, uint16_t height, bool alpha)
 : texture_data(texture_data), width(width), height(height), alpha(alpha)
 {
     unsigned int decoded_data_size = width * height * 4;
@@ -30,7 +30,7 @@ void Texture::Save(std::string file_path)
 {
     BitMap bitmap;
     bitmap.Save(
-        std::vector<char>(decoded_data.get(), decoded_data.get() + decoded_data_size),
+        texture_data,
         width,
         height,
         file_path

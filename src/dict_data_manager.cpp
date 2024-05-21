@@ -28,6 +28,12 @@ void DictDataManager::ExtractFiles()
     mixed_data_file->ParseFileTable(*file_table);
 
     ExtractMixedData();
+
+    texture_metadata_file = std::make_unique<TextureMetaDataFile>(dict->file_array[2].file_path);
+    texture_metadata_file->Parse();
+    
+    texture_manager = std::make_unique<TextureManager>(*file_table, *texture_metadata_file);
+    ExtractTextures();
 }
 
 void DictDataManager::RepackFiles()
@@ -79,19 +85,20 @@ void DictDataManager::ExtractMixedData()
     std::string file_table_path = destination_directory_path + "file_table/";
     dir_handler.CreateDirectory(file_table_path.c_str());
 
-    for (const FileData &data : file_table->file_entries)
+    for (const FileEntry &file_entry : file_table->file_entries)
     {
         std::stringstream type;
-        type << std::hex << data.type << std::dec << "-" << data.flags_3;
+        type << std::hex << file_entry.type << std::dec << "-" << file_entry.file_header_offset;
 
         std::ofstream file(file_table_path + type.str(), std::ios::binary);
-        file.write(reinterpret_cast<const char *>(data.data.data()), data.data.size());
+        file.write(reinterpret_cast<const char *>(file_entry.file_header.data()), file_entry.file_header_size);
+        file.write(reinterpret_cast<const char *>(file_entry.data.data()), file_entry.data.size());
         file.close();
 
-        if (!data.has_children)
+        if (!file_entry.has_children)
             continue;
         
-        ExtractDataChildren(data, file_table_path);
+        ExtractDataChildren(file_entry, file_table_path);
     }
 }
 
@@ -111,6 +118,15 @@ void DictDataManager::ExtractDataChildren(const FileData &file_data, const std::
         
         ExtractDataChildren(*data, file_table_path);
     }
+}
+
+void DictDataManager::ExtractTextures()
+{
+    FileSystemDirectoryHandler dir_handler;
+    std::string textures_path = destination_directory_path + "textures/";
+    dir_handler.CreateDirectory(textures_path.c_str());
+
+    texture_manager->ExtractTextures(textures_path);
 }
 
 void DictDataManager::RepackFile(std::vector<uint8_t> &data_file_data, FileSection &file_section)

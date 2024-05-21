@@ -36,7 +36,7 @@ BitMap::BitMap()
 {
 }
 
-void BitMap::Save(const std::vector<char> &data, uint32_t width, uint32_t height, std::string file_path)
+void BitMap::Save(const std::vector<uint8_t> &data, uint32_t width, uint32_t height, std::string file_path)
 {
     std::ofstream bitmap_file(file_path + ".bmp", std::ios::binary);
 

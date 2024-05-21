@@ -8,11 +8,8 @@ TextureMetaDataFile::TextureMetaDataFile(std::string file_path) : file_path(file
 
 }
 
-void TextureMetaDataFile::Parse(std::string file_path)
-{
-    if ("" == file_path)
-        file_path = this->file_path;
-    
+void TextureMetaDataFile::Parse()
+{   
     BinaryReaderFile reader(file_path);
     
     while (reader.readUInt32() == TextureMetaData::identifier)
@@ -30,7 +27,7 @@ void TextureMetaDataFile::ParseMetaData(BinaryReaderFile &reader)
 
     if (meta_data.hash != reader.readUInt32())
     {
-        std::cerr << "Expected hash here, but was not found! Something is different in this texture metadata file.\n";
+        std::cerr << "Expected hash here, but was not found! Something is wrong with this texture metadata file.\n";
         return;
     }
 

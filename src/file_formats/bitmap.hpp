@@ -48,5 +48,5 @@ public:
     BitMap();
     ~BitMap() = default;
 
-    void Save(const std::vector<char> &data, uint32_t width, uint32_t height, std::string file_path);
+    void Save(const std::vector<uint8_t> &data, uint32_t width, uint32_t height, std::string file_path);
 };

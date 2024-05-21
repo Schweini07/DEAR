@@ -13,7 +13,7 @@ void MixedDataFile::ParseFileTable(FileTable &file_table)
 
     for (FileEntry &file_entry : file_table.file_entries)
     {
-        //file_entry.file_header = GetDataBuffer(file_entry.file_header_offset, file_entry.file_header_size);
+        file_entry.file_header = GetDataBuffer(file_entry.file_header_offset, file_entry.file_header_size);
 
         if (!file_entry.has_children)
            file_entry.data = GetDataBuffer(file_entry.flags_3, file_entry.flags_2);
