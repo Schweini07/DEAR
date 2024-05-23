@@ -54,10 +54,10 @@ void BitMap::Save(const std::vector<uint8_t> &data, uint32_t width, uint32_t hei
     for (size_t i = 3; i < width*height*4; i+=4)
     {
         Pixel pixel;
-        pixel.alpha = data.data()[i-3];
-        pixel.blue = data.data()[i-2];
-        pixel.green = data.data()[i-1];
-        pixel.red = data.data()[i];
+        pixel.alpha = data.data()[i];
+        pixel.blue = data.data()[i-1];
+        pixel.green = data.data()[i-2];
+        pixel.red = data.data()[i-3];
 
         pixel.SaveToFile(bitmap_file);
     }
