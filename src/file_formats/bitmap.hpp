@@ -22,7 +22,7 @@ struct Header
         uint32_t width;
         uint32_t height;
         uint16_t number_of_color_planes = 1;
-        uint16_t color_depth = 24;
+        uint16_t color_depth = 32;
         uint32_t compression_format = 0;
         uint32_t raw_data_size;
         uint32_t horizontal_resolution = 0;
@@ -38,6 +38,7 @@ struct Header
         uint8_t blue;
         uint8_t green;
         uint8_t red;
+        uint8_t alpha;
 
         void SaveToFile(std::ofstream &file);
     };

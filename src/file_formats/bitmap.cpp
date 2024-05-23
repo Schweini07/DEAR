@@ -30,6 +30,7 @@ void Pixel::SaveToFile(std::ofstream &file)
     file.write((char *)&this->blue, sizeof(uint8_t));
     file.write((char *)&this->green, sizeof(uint8_t));
     file.write((char *)&this->red, sizeof(uint8_t));
+    file.write((char *)&this->alpha, sizeof(uint8_t));
 }
 
 BitMap::BitMap()
@@ -50,15 +51,16 @@ void BitMap::Save(const std::vector<uint8_t> &data, uint32_t width, uint32_t hei
     info_header.raw_data_size = data.size();
     info_header.SaveToFile(bitmap_file);
 
-/*     for (size_t i = 2; i < width*height*4; i+=3)
+    for (size_t i = 3; i < width*height*4; i+=4)
     {
         Pixel pixel;
+        pixel.alpha = data.data()[i-3];
         pixel.blue = data.data()[i-2];
-        pixel.green = data.data()[i-2];
+        pixel.green = data.data()[i-1];
         pixel.red = data.data()[i];
 
         pixel.SaveToFile(bitmap_file);
     }
- */
+
     bitmap_file.close();
 }

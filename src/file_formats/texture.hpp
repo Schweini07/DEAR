@@ -16,11 +16,8 @@ public:
 
 private:
     std::vector<uint8_t> texture_data;
-    std::unique_ptr<unsigned int[]> decoded_data;
 
     uint16_t width;
     uint16_t height;
     bool alpha;
-
-    unsigned decoded_data_size;
 };

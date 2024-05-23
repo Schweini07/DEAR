@@ -64,9 +64,12 @@ src/extracted_files/mixed_data_file.cpp
 src/gui/gui.cpp
 
 src/utils/FileSystemDirectoryHandler.cpp
+src/utils/ETC1Converter.cpp
 )
 target_link_libraries(DEAR Binary-Reader)
+target_link_libraries(DEAR rg-etc1)
 target_link_libraries(DEAR tgui)
 target_link_libraries(DEAR ZLIB::ZLIB)
 
 add_subdirectory(lib/Binary-Reader)
+add_subdirectory(lib/rg-etc1)

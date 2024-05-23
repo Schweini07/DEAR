@@ -1,0 +1,1 @@
+add_library(rg-etc1 rg_etc1.cpp)

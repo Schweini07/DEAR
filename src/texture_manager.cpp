@@ -1,5 +1,7 @@
 #include "texture_manager.hpp"
 
+#include <cmath>
+#include <iostream>
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/texture_metadata_file.hpp"
 #include "extracted_files/file_constants.hpp"
@@ -20,8 +22,10 @@ void TextureManager::ExtractTextures(std::string file_path)
             return;
         
         TextureMetaData meta_data = texture_metadata_files->at(index);
-        
-        Texture texture(file_entry.children[1]->data, meta_data.width, meta_data.height, false);
+        bool has_alpha = (13 == meta_data.compression_format) ? true : false;
+
+        Texture texture(file_entry.children[1]->data, meta_data.width, meta_data.height, has_alpha);
+        texture.DecodeETC1();
         texture.Save(file_path + "texture" + std::to_string(index));
 
         index++;

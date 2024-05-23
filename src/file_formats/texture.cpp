@@ -1,21 +1,23 @@
 #include "texture.hpp"
 
-#include "bitmap.hpp"
-//#include <ETC1Lib/ETC1Lib/ETC1.cpp>
-//#include <lodepng/lodepng.h>
 #include <fstream>
 #include <iostream>
+#include "utils/ETC1Converter.hpp"
+#include "bitmap.hpp"
 
 Texture::Texture(std::vector<uint8_t> texture_data, uint16_t width, uint16_t height, bool alpha)
 : texture_data(texture_data), width(width), height(height), alpha(alpha)
 {
-    unsigned int decoded_data_size = width * height * 4;
 }
 
 void Texture::DecodeETC1()
 {
-    decoded_data = std::make_unique<unsigned int[]>(decoded_data_size);
+    std::vector<uint8_t> decoded_data;
 
+    ETC1Converter etc1_converter;
+    etc1_converter.Decode(texture_data, decoded_data, width, height, alpha);
+    std::cout << "Size: " << decoded_data.size() << "\n";
+    texture_data = decoded_data;
 /*     ConvertETC1(
         decoded_data.get(),
         &decoded_data_size, 
@@ -35,6 +37,10 @@ void Texture::Save(std::string file_path)
         height,
         file_path
     );
+
+    std::ofstream test_file(file_path + ".test");
+    test_file.write(reinterpret_cast<char *>(texture_data.data()), texture_data.size());
+    test_file.close();
 
 /*     unsigned int decoded_data_size = width * height * 4;
     unsigned int decoded_data_buffer[decoded_data_size];
