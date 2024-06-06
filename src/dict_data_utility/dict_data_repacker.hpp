@@ -1,9 +1,9 @@
 #pragma once
 
-#include <memory>
 #include <string>
 #include <vector>
 #include <fstream>
+#include <cstdint>
 
 class Dict;
 class FileTable;
@@ -15,6 +15,7 @@ class DictDataRepacker
 {
 public:
     DictDataRepacker(
+        Dict *dict,
         FileTable *extracted_file_table,
         TextureMetaDataFile *extracted_texture_metadata_file,
         MixedDataFile *extracted_mixed_data_file,
@@ -24,11 +25,10 @@ public:
 
     void Repack();
 
-    std::unique_ptr<Dict> dict;
-
 private:
     void RepackDict();
     void RepackData();
+    std::vector<uint8_t> CompressDataBuffer(const std::vector<uint8_t> &decompressed_buffer);
 
     void RepackFileTable();
     void RepackTextureMetaDataFile();
@@ -39,6 +39,7 @@ private:
 
     std::vector<std::string> repacked_file_paths;
 
+    Dict *dict;
     FileTable *extracted_file_table;
     TextureMetaDataFile *extracted_texture_metadata_file;
     MixedDataFile *extracted_mixed_data_file;
