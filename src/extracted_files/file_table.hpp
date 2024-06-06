@@ -1,5 +1,7 @@
 #pragma once
 
+#include "extracted_file.hpp"
+
 #include <string>
 #include <cstdint>
 #include <vector>
@@ -22,6 +24,8 @@ public:
 
     std::vector<FileData *> children;
     std::vector<uint8_t> data;
+
+    std::string file_path;
 };
 
 class FileEntry : public FileData
@@ -34,7 +38,7 @@ public:
     std::vector<uint8_t> file_header;
 };
 
-class FileTable
+class FileTable : public ExtractedFile
 {
 public:
     FileTable(std::string file_path = "");
@@ -55,6 +59,4 @@ private:
 
     void WriteFileEntry(const FileEntry &file_entry, std::ofstream &file_table_file);
     void WriteFileData(const FileData &data, std::ofstream &file_table_file);
-
-    std::string file_path;
 };

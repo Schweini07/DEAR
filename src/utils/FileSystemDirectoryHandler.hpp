@@ -6,5 +6,5 @@ public:
     FileSystemDirectoryHandler();
     ~FileSystemDirectoryHandler() = default;
 
-    void CreateDirectory(const char *path);
+    static void CreateDirectory(const char *path);
 };

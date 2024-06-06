@@ -5,7 +5,6 @@
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/texture_metadata_file.hpp"
 #include "extracted_files/file_constants.hpp"
-#include "file_formats/texture.hpp"
 
 TextureManager::TextureManager(FileTable &file_table, TextureMetaDataFile &texture_metadata_file)
 {

@@ -94,3 +94,8 @@ void Dict::Write(std::string new_dict_path)
     
     dict_file.close();
 }
+
+bool Dict::IsCompressed()
+{
+    return header.compression_flag;
+}

@@ -49,19 +49,24 @@ include_directories(lib)
 
 add_executable(DEAR
 src/main.cpp
-src/dict_data_manager.cpp
 src/texture_manager.cpp
+
+src/dict_data_utility/dict_data_manager.cpp
+src/dict_data_utility/dict_data_extractor.cpp
+src/dict_data_utility/dict_data_repacker.cpp
 
 src/file_formats/dict.cpp
 src/file_formats/data.cpp
 src/file_formats/texture.cpp
 src/file_formats/bitmap.cpp
 
+src/extracted_files/extracted_file.cpp
 src/extracted_files/file_table.cpp
 src/extracted_files/texture_metadata_file.cpp
 src/extracted_files/mixed_data_file.cpp
 
 src/gui/gui.cpp
+src/gui/components/file_selector.cpp
 
 src/utils/FileSystemDirectoryHandler.cpp
 src/utils/ETC1Converter.cpp

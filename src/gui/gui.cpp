@@ -3,10 +3,15 @@
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/texture_metadata_file.hpp"
 #include "extracted_files/mixed_data_file.hpp"
+#include "dict_data_utility/dict_data_manager.hpp"
 
 GUI::GUI()
 {
     dark_theme.load("resources/themes/Dark.txt");
+}
+
+GUI::~GUI()
+{
 }
 
 void GUI::StartApplication()
@@ -121,14 +126,14 @@ void GUI::LoadMainForm()
 
     extracted_files_panel_list_box = gui->get<tgui::PanelListBox>("ExtractedFilesPanelListBox");
     extracted_files_panel_list_box->setRenderer(dark_theme.getRenderer("Panel"));
-
+    
     repack_files_button = gui->get<tgui::Button>("RepackFilesButton");
     if (!start_extraction_button->isEnabled())
     {
         repack_files_button->setEnabled(false);
     }
     repack_files_button->onPress([this] {
-        dict_data_manager->RepackFiles();
+        dict_data_manager->Repack();
     });
 }
 
@@ -161,7 +166,7 @@ void GUI::HandleStartExtractionButtonState()
 void GUI::ExtractFiles()
 {
     dict_data_manager = std::make_unique<DictDataManager>(dict_file_path.toStdString(), data_file_path.toStdString(), destination_directory_path.toStdString());
-    dict_data_manager->ExtractFiles();
+    dict_data_manager->Extract();
 
 /*     FileTable file_table(dict->file_array[0].file_path);
     file_table.Parse();

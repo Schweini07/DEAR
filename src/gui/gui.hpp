@@ -3,17 +3,18 @@
 #include <memory>
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
-#include "dict_data_manager.hpp"
+#include "components/file_selector.hpp"
 
 class FileTableEntry;
 class TextureMetaData;
 class FileSection;
+class DictDataManager;
 
 class GUI
 {
 public:
     GUI();
-    ~GUI() = default;
+    ~GUI();
 
     void StartApplication();
 
@@ -36,7 +37,6 @@ private:
     std::unique_ptr<tgui::Gui> gui;
     tgui::Theme dark_theme;
 
-
     tgui::Button::Ptr load_dict_button;
     tgui::Button::Ptr load_data_button;
     tgui::EditBox::Ptr directory_path_edit_box;
@@ -49,7 +49,6 @@ private:
     tgui::String dict_file_path;
     tgui::String data_file_path;
     tgui::String destination_directory_path;
-
 
     std::unique_ptr<DictDataManager> dict_data_manager;
 };

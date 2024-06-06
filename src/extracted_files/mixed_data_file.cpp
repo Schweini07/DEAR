@@ -3,7 +3,7 @@
 #include <fstream>
 #include "file_table.hpp"
 
-MixedDataFile::MixedDataFile(std::string file_path) : file_path(file_path)
+MixedDataFile::MixedDataFile(std::string file_path) : ExtractedFile(file_path)
 {
 }
 

@@ -53,6 +53,8 @@ public:
     DictHeader header;
     std::vector<FileSection> file_array;
 
+    bool IsCompressed();
+
 private:
     std::string file_path;
 };

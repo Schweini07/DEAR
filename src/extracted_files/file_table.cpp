@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-FileTable::FileTable(std::string file_path) : file_path(file_path)
+FileTable::FileTable(std::string file_path) : ExtractedFile(file_path)
 {
 }
 
@@ -65,7 +65,7 @@ void FileTable::ParseFileEntry(BinaryReaderFile &reader, uint32_t &current_index
     file_entry.flags_3 = reader.readUInt32();
 
     file_entry.aligned_by_16_bytes = file_entry.flags_1 & 0x0100;
-    file_entry.dict_index = (file_entry.flags_1 & 0x1C00) >> 10;
+    file_entry.dict_index = (file_entry.flags_1 >> 12) & 3;
     file_entry.has_children = file_entry.flags_1 & 0x8000;
 
     file_entries.push_back(file_entry);
@@ -81,7 +81,8 @@ void FileTable::ParseFileEntry(BinaryReaderFile &reader, uint32_t &current_index
     << "\nOffset: " << file_entry.file_header_offset
     << "\nAmount of children or data size: " << file_entry.flags_2
     << "\nStart index or data offset: " << file_entry.flags_3
-    << "\nFlags:" << file_entry.aligned_by_16_bytes << " " << unsigned(file_entry.dict_index) << " " << file_entry.has_children << "\n\n";
+    << "\nHas Children:" << file_entry.has_children
+    << "\nIndex: " << (unsigned)file_entry.dict_index << "\n\n";
 }
 
 void FileTable::ParseFileData(BinaryReaderFile &reader, uint32_t &current_index)
@@ -93,7 +94,7 @@ void FileTable::ParseFileData(BinaryReaderFile &reader, uint32_t &current_index)
     data.flags_3 = reader.readUInt32();
 
     data.aligned_by_16_bytes = data.flags_1 & 0x0100;
-    data.dict_index = (data.flags_1 & 0x1C00) >> 10;
+    data.dict_index = (data.flags_1 >> 12) & 3;
     data.has_children = data.flags_1 & 0x8000;
 
     file_data.push_back(data);
