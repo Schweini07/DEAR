@@ -19,9 +19,9 @@ DictDataRepacker::~DictDataRepacker()
 
 void DictDataRepacker::Repack()
 {
-    RepackMixedDataFile();
-    RepackTextureMetaDataFile();
-    RepackFileTable();
+    //RepackMixedDataFile();
+    //RepackTextureMetaDataFile();
+    //RepackFileTable();
 
     RepackData();
 
@@ -30,11 +30,64 @@ void DictDataRepacker::Repack()
 
 void DictDataRepacker::RepackDict()
 {
+    dict->Write(directory_path + "repacked.dict");
 }
 
 void DictDataRepacker::RepackData()
 {
     std::ofstream repacked_data_file(directory_path + "repacked.data", std::ios::binary);
+
+    uint32_t current_offset = 0;
+    for (FileSection &file_section : dict->file_array)
+    {
+        bool is_debug_file = (1 == file_section.file_extension);
+
+        if (is_debug_file)
+            file_section.offset = 0;
+        else
+            file_section.offset = current_offset;
+
+        std::ifstream file_buffer(file_section.file_path, std::ios::binary | std::ios_base::ate);
+
+        std::streamsize file_size = file_buffer.tellg();
+        file_section.decompressed_file_length = file_size;
+        file_buffer.seekg(0, std::ios_base::beg);
+        
+        if (dict->IsCompressed())
+        {            
+            std::vector<uint8_t> decompressed_data;
+            decompressed_data.resize(file_size);
+            file_buffer.read(reinterpret_cast<char *>(decompressed_data.data()), file_size);
+
+            std::vector<uint8_t> compressed_data = CompressDataBuffer(decompressed_data);
+            file_section.compressed_file_length = compressed_data.size();
+
+            // 1 equals .debug file
+            if (is_debug_file)
+                continue;
+            
+            current_offset += compressed_data.size();
+            repacked_data_file.write(reinterpret_cast<char *>(compressed_data.data()), compressed_data.size());
+
+        }
+        else
+        {
+            // 1 equals .debug file
+            if (is_debug_file)
+                continue;
+            
+            current_offset += file_size;
+            repacked_data_file << file_buffer.rdbuf();
+        }
+
+        file_buffer.close();
+    }
+    
+    repacked_data_file.close(); 
+
+    // Not in use right now
+
+/*     std::ofstream repacked_data_file(directory_path + "repacked.data", std::ios::binary);
 
     for (const std::string &repacked_file_path : repacked_file_paths)
     {
@@ -43,7 +96,7 @@ void DictDataRepacker::RepackData()
         if (dict->IsCompressed())
         {
             std::streamsize file_size = repacked_file.tellg();
-            repacked_data_file.seekp(0, std::ios_base::beg);
+            repacked_file.seekg(0, std::ios_base::beg);
 
             std::vector<uint8_t> decompressed_data;
             decompressed_data.resize(file_size);
@@ -61,7 +114,7 @@ void DictDataRepacker::RepackData()
         repacked_file.close();
     }
     
-    repacked_data_file.close();
+    repacked_data_file.close(); */
 }
 
 std::vector<uint8_t> DictDataRepacker::CompressDataBuffer(const std::vector<uint8_t> &decompressed_buffer)
@@ -148,9 +201,7 @@ void DictDataRepacker::RepackMixedDataFile()
     uint32_t current_offset = 0;
     for (FileData *data : sorted_data)
     {
-        if (data->type == 0x7100)
-            continue;
-        std::cout << std::hex << "0x" << data->type << " | " << std::dec << current_offset << "\n";
+        //std::cout << "Repacking: " << std::hex << "0x" << data->type << " | " << std::dec << current_offset << "\n";
         RepackFileData(*data, repacked_mixed_data_file, current_offset);
         current_offset += data->flags_2;
     }

@@ -7,6 +7,7 @@
 #include "file_formats/data.hpp"
 #include "dict_data_extractor.hpp"
 #include "dict_data_repacker.hpp"
+#include "texture_manager.hpp"
 
 class Dict;
 class Data;
@@ -25,6 +26,7 @@ private:
     std::unique_ptr<Data> data;
     
     std::unique_ptr<DictDataExtractor> extractor;
+    std::unique_ptr<TextureManager> texture_manager;
 
     std::string destination_directory_path;
 };

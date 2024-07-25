@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include <rg-etc1/rg_etc1.h>
+#include <fstream>
 
 ETC1Converter::ETC1Converter()
 {
@@ -58,7 +59,7 @@ void ETC1Converter::Decode(std::vector<uint8_t> compressed_data, std::vector<uin
                     for (uint8_t byte = 0; byte < 4; byte++)
                     {
                         uint32_t source_position = 4 * (decoded_block_x + decoded_block_y*4) + byte;
-                        uint32_t destination_position = ((y*4 + decoded_block_y) * width + x*4 + decoded_block_x) *4 + byte;
+                        uint32_t destination_position = ((y*4 + decoded_block_y) * width + x*4 + decoded_block_x)*4 + byte;
 
                         decompressed_data[destination_position] = decoded_block[source_position];
                     }

@@ -5,6 +5,7 @@
 #include "extracted_files/file_table.hpp"
 #include "extracted_files/texture_metadata_file.hpp"
 #include "extracted_files/file_constants.hpp"
+#include "utils/FileSystemDirectoryHandler.hpp"
 
 TextureManager::TextureManager(FileTable &file_table, TextureMetaDataFile &texture_metadata_file)
 {
@@ -14,6 +15,8 @@ TextureManager::TextureManager(FileTable &file_table, TextureMetaDataFile &textu
 
 void TextureManager::ExtractTextures(std::string file_path)
 {
+    FileSystemDirectoryHandler::CreateDirectory(file_path.c_str());
+
     int index = 0;
     for (const FileEntry &file_entry : file_table->file_entries)
     {

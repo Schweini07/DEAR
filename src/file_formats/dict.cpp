@@ -56,7 +56,7 @@ void Dict::Parse()
     {
         file_array[i].offset =  reader.readUInt32();
         file_array[i].decompressed_file_length =  reader.readUInt32();
-        file_array[i].compressed_file_length =  reader.readUInt32();
+        file_array[i].compressed_file_length = reader.readUInt32();    
         file_array[i].type =  reader.readUInt8();
         file_array[i].padding =  reader.readUInt8();
         file_array[i].file_extension =  reader.readUInt8();

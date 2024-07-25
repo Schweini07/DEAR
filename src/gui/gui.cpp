@@ -168,20 +168,6 @@ void GUI::ExtractFiles()
     dict_data_manager = std::make_unique<DictDataManager>(dict_file_path.toStdString(), data_file_path.toStdString(), destination_directory_path.toStdString());
     dict_data_manager->Extract();
 
-/*     FileTable file_table(dict->file_array[0].file_path);
-    file_table.Parse();
-
-    TextureMetaDataFile text_metadata_file(dict->file_array[2].file_path);
-    text_metadata_file.Parse();
-
-    for (size_t i = 0; i < file_table.texture_data.size(); i++)
-    {
-        FileTableEntry texture_entry = file_table.texture_data[i];
-        TextureMetaData texture_metadata = text_metadata_file.texture_metadata[i];
-
-        ExtractTexture(texture_entry, texture_metadata, dict->file_array[3].file_path);
-    } */
-
     //InitExtractedFilesPanelListBox(dict->file_array);
 }
 
