@@ -30,7 +30,7 @@ private:
 
 private:
     std::unique_ptr<sf::RenderWindow> window;
-    sf::VideoMode window_size {960, 540};
+    sf::VideoMode window_size;
     sf::String window_title = "Data Extractor and Repacker";
     std::string window_icon_path = "resources/images/icon.png";
 

@@ -6,7 +6,6 @@
 
 struct FileSection
 {
-    uint8_t unknown_1;
     uint32_t offset;
     uint32_t decompressed_file_length;
     uint32_t compressed_file_length;
@@ -17,6 +16,12 @@ struct FileSection
 
     uint8_t id;
     std::string file_path;
+};
+
+struct FileTableInfo
+{
+    uint16_t file_count;
+    uint16_t block_index;
 };
 
 struct FileTableReference
@@ -37,8 +42,6 @@ struct DictHeader
     uint8_t padding_2;
     uint8_t file_table_reference_count;
     uint8_t file_extension_count;
-
-    std::vector<FileTableReference> file_table_references;
 };
 
 class Dict
@@ -51,6 +54,8 @@ public:
     void Write(std::string new_dict_path);
 
     DictHeader header;
+    std::vector<FileTableReference> file_table_references;
+    std::vector<FileTableInfo> file_table_info;
     std::vector<FileSection> file_array;
 
     bool IsCompressed();

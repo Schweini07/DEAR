@@ -21,7 +21,7 @@ void DictDataRepacker::Repack()
 {
     //RepackMixedDataFile();
     //RepackTextureMetaDataFile();
-    //RepackFileTable();
+    RepackFileTable();
 
     RepackData();
 
@@ -84,37 +84,6 @@ void DictDataRepacker::RepackData()
     }
     
     repacked_data_file.close(); 
-
-    // Not in use right now
-
-/*     std::ofstream repacked_data_file(directory_path + "repacked.data", std::ios::binary);
-
-    for (const std::string &repacked_file_path : repacked_file_paths)
-    {
-        std::ifstream repacked_file(repacked_file_path, std::ios::binary | std::ios_base::ate);
-
-        if (dict->IsCompressed())
-        {
-            std::streamsize file_size = repacked_file.tellg();
-            repacked_file.seekg(0, std::ios_base::beg);
-
-            std::vector<uint8_t> decompressed_data;
-            decompressed_data.resize(file_size);
-            repacked_file.read(reinterpret_cast<char *>(decompressed_data.data()), file_size);
-
-            std::vector<uint8_t> compressed_data = CompressDataBuffer(decompressed_data);
-            repacked_data_file.write(reinterpret_cast<char *>(compressed_data.data()), compressed_data.size());
-        }
-        else
-        {
-            repacked_file.seekg(0, std::ios_base::beg);
-            repacked_data_file << repacked_file.rdbuf();
-        }
-
-        repacked_file.close();
-    }
-    
-    repacked_data_file.close(); */
 }
 
 std::vector<uint8_t> DictDataRepacker::CompressDataBuffer(const std::vector<uint8_t> &decompressed_buffer)

@@ -5,7 +5,7 @@
 #include "extracted_files/mixed_data_file.hpp"
 #include "dict_data_utility/dict_data_manager.hpp"
 
-GUI::GUI()
+GUI::GUI() : window_size({960, 540})
 {
     dark_theme.load("resources/themes/Dark.txt");
 }
@@ -23,7 +23,7 @@ void GUI::StartApplication()
     gui->onViewChange([this] {
         const float CURRENT_SCREEN_HEIGHT = gui->getView().getRect().height;
 
-        gui->setTextSize(static_cast<unsigned int>(13.f * (CURRENT_SCREEN_HEIGHT / window_size.height)));
+        gui->setTextSize(static_cast<unsigned int>(13.f * (CURRENT_SCREEN_HEIGHT / window_size.size.y)));
         //tgui::getBackend()->setFontScale(CURRENT_SCREEN_HEIGHT / static_cast<float>(window_size.height));
     });
 
@@ -33,13 +33,11 @@ void GUI::StartApplication()
 
     while (window->isOpen())
     {
-        sf::Event event;
-
-        while (window->pollEvent(event))
+        while (const std::optional event = window->pollEvent())
         {
-            gui->handleEvent(event);
+            gui->handleEvent(*event);
 
-            if (event.type == sf::Event::Closed)
+            if (event->is<sf::Event::Closed>())
                 window->close();
         }
 
@@ -59,7 +57,7 @@ void GUI::LoadWindowIcon()
         std::cerr << "Unable to load window icon.\n";
     }
 
-    window->setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+    window->setIcon(image);
 }
 
 void GUI::LoadMainForm()

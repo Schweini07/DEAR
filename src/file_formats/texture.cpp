@@ -11,21 +11,14 @@ Texture::Texture(std::vector<uint8_t> texture_data, uint16_t width, uint16_t hei
 }
 
 void Texture::DecodeETC1()
-{
+{   
     std::vector<uint8_t> decoded_data;
+    decoded_data.resize(width*height);
 
     ETC1Converter etc1_converter;
     etc1_converter.Decode(texture_data, decoded_data, width, height, alpha);
     std::cout << "Size: " << decoded_data.size() << "\n";
     texture_data = decoded_data;
-/*     ConvertETC1(
-        decoded_data.get(),
-        &decoded_data_size, 
-        reinterpret_cast<unsigned int *>(texture_data.data()),
-        width,
-        height,
-        alpha
-    ); */
 }
 
 void Texture::Save(std::string file_path)

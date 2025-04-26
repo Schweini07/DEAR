@@ -27,7 +27,10 @@ void Dict::Parse()
     header.file_table_reference_count = reader.readUInt8();
     header.file_extension_count = reader.readUInt8();
 
-    std::cout << unsigned(header.compression_flag) << " | " << header.file_count << " | " << header.largest_compressed_file_size << "\n"; 
+    std::cout << "Compressed: " << unsigned(header.compression_flag)
+    << "\nFile Count: " << header.file_count
+    << "\nLargest Compressed File Size: " << header.largest_compressed_file_size
+    << "\n"; 
 
     std::cout << "=========================\n";
 
@@ -39,30 +42,38 @@ void Dict::Parse()
         for (uint8_t j = 0; j < 8; j++)
             file_table_reference.file_indices.push_back(reader.readUInt8());
         
-        header.file_table_references.push_back(file_table_reference);
+        file_table_references.push_back(file_table_reference);
     }
 
-    for (uint8_t i = 0; i < header.file_count; i++)
+    for (uint8_t i = 0; i < header.file_table_reference_count; i++)
     {
-        FileSection data_file;
+        FileTableInfo table_info;
 
-        data_file.id = i;
-        data_file.unknown_1 = reader.readUInt8();
+        table_info.file_count = reader.readUInt16();
+        table_info.block_index = reader.readUInt16();
 
-        file_array.push_back(data_file);
+        file_table_info.push_back(table_info);
     }
     
     for (uint8_t i = 0; i < header.file_count; i++)
     {
-        file_array[i].offset =  reader.readUInt32();
-        file_array[i].decompressed_file_length =  reader.readUInt32();
-        file_array[i].compressed_file_length = reader.readUInt32();    
-        file_array[i].type =  reader.readUInt8();
-        file_array[i].padding =  reader.readUInt8();
-        file_array[i].file_extension =  reader.readUInt8();
-        file_array[i].unknown_2 =  reader.readUInt8();
+        FileSection file_section;
+        file_section.id = i;
+        file_section.offset =  reader.readUInt32();
+        file_section.decompressed_file_length =  reader.readUInt32();
+        file_section.compressed_file_length = reader.readUInt32();    
+        file_section.type =  reader.readUInt8();
+        file_section.padding =  reader.readUInt8();
+        file_section.file_extension =  reader.readUInt8();
+        file_section.unknown_2 =  reader.readUInt8();
 
-        std::cout << file_array[i].offset << " | " << file_array[i].decompressed_file_length << " | " << file_array[i].compressed_file_length << "\n";
+        file_array.push_back(file_section);
+
+        std::cout << "Offset: " << file_array[i].offset 
+        << "\nDecompressed File Length: " << file_array[i].decompressed_file_length
+        << "\nCompressed File Length: " << file_array[i].compressed_file_length
+        << "\nDebug: " << unsigned(file_array[i].file_extension)
+        << "\n\n";
     }
 }
 
@@ -72,7 +83,7 @@ void Dict::Write(std::string new_dict_path)
 
     dict_file.write(reinterpret_cast<char *>(&header), 0x14);
 
-    for (const FileTableReference &file_table_reference : header.file_table_references)
+    for (const FileTableReference &file_table_reference : file_table_references)
     {
         dict_file.write(reinterpret_cast<const char *>(&(file_table_reference.hash)), 0x4);
 
@@ -80,11 +91,11 @@ void Dict::Write(std::string new_dict_path)
             dict_file.write(reinterpret_cast<const char *>(&file_index), 0x1);
     }
 
-    for (const FileSection &file_section : file_array)
-        dict_file.write(reinterpret_cast<const char *>(&file_section), 0x1);
+    for (const FileTableInfo &info : file_table_info)
+        dict_file.write(reinterpret_cast<const char *>(&info), 0x4);
     
     for (const FileSection &file_section : file_array)
-        dict_file.write(reinterpret_cast<const char *>(&file_section.offset), 0x10);
+        dict_file.write(reinterpret_cast<const char *>(&file_section), 0x10);
 
     dict_file.write(".data", 5);
     dict_file.put(0);

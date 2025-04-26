@@ -16,9 +16,6 @@ void DictDataManager::Extract()
 {
     extractor = std::make_unique<DictDataExtractor>(dict.get(), data.get(), destination_directory_path);
     extractor->Extract();
-
-    texture_manager = std::make_unique<TextureManager>(*extractor->file_table.get(), *extractor->texture_metadata.get());
-    texture_manager->ExtractTextures(destination_directory_path + "/textures/");
 }
 
 void DictDataManager::Repack()

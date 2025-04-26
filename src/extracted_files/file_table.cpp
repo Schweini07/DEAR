@@ -76,13 +76,13 @@ void FileTable::ParseFileEntry(BinaryReaderFile &reader, uint32_t &current_index
 
     current_index += 2;
 
-    std::cout << "File Entry: 0x" << std::hex << file_entry.type
-    << "\nSize:" << std::dec << file_entry.file_header_size
-    << "\nOffset: " << file_entry.file_header_offset
-    << "\nAmount of children or data size: " << file_entry.flags_2
-    << "\nStart index or data offset: " << file_entry.flags_3
-    << "\nHas Children:" << file_entry.has_children
-    << "\nIndex: " << (unsigned)file_entry.dict_index << "\n\n";
+    // std::cout << "File Entry: 0x" << std::hex << file_entry.type
+    // << "\nSize:" << std::dec << file_entry.file_header_size
+    // << "\nOffset: " << file_entry.file_header_offset
+    // << "\nAmount of children or data size: " << file_entry.flags_2
+    // << "\nStart index or data offset: " << file_entry.flags_3
+    // << "\nHas Children:" << file_entry.has_children
+    // << "\nIndex: " << (unsigned)file_entry.dict_index << "\n\n";
 }
 
 void FileTable::ParseFileData(BinaryReaderFile &reader, uint32_t &current_index)
@@ -101,14 +101,13 @@ void FileTable::ParseFileData(BinaryReaderFile &reader, uint32_t &current_index)
 
     global_data.resize(current_index + 1);
     global_data[current_index] = &file_data.back();
-
     current_index++;
 
-    std::cout << "File Data: 0x" << std::hex << data.type << std::dec << "\n"
-    << "Data size: " << data.flags_2 << "\n"
-    << "Data offset: " << data.flags_3 << "\n"
-    << "Has Children: " << data.has_children << "\n"
-    << "Index: " << unsigned(data.dict_index) << "\n\n";
+    // std::cout << "File Data: 0x" << std::hex << data.type << std::dec << "\n"
+    // << "Data size: " << data.flags_2 << "\n"
+    // << "Data offset: " << data.flags_3 << "\n"
+    // << "Has Children: " << data.has_children << "\n"
+    // << "Index: " << unsigned(data.dict_index) << "\n\n";
 }
 
 void FileTable::WriteFileEntry(const FileEntry &file_entry, std::ofstream &file_table_file)

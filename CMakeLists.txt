@@ -7,12 +7,12 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 include(FetchContent)
 
 # include SFML
-find_package(SFML COMPONENTS graphics QUIET)
+find_package(SFML COMPONENTS Graphics QUIET)
 if (NOT SFML_FOUND)
     FetchContent_Declare(
         sfml
         GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 69ea0cd863aed1d4092b970b676924a716ff718b
+        GIT_TAG 817c2ad2b11f109005f6509389de0d49622afd57
     )
     FetchContent_MakeAvailable(sfml)
 endif()
@@ -26,7 +26,7 @@ if (NOT TGUI_FOUND)
     FetchContent_Declare(
         tgui
         GIT_REPOSITORY https://github.com/texus/TGUI.git
-        GIT_TAG 9967a777d3a80870fc7da08ad7f29c96937143df
+        GIT_TAG 7660ecf7cb679cd835147bfdda908a528181c650
     )
     FetchContent_MakeAvailable(tgui)
 endif()

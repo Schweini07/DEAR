@@ -9,17 +9,17 @@ ETC1Converter::ETC1Converter()
 {
 }
 
-void ETC1Converter::Decode(std::vector<uint8_t> compressed_data, std::vector<uint8_t> &decompressed_data, uint16_t width, uint16_t height, bool alpha)
+void ETC1Converter::Decode(std::vector<uint8_t> &compressed_data, std::vector<uint8_t> &decompressed_data, uint16_t width, uint16_t height, bool alpha)
 {
     decompressed_data.resize(width * height * 4);
 
     uint32_t offset = 0;
 
-    for (uint16_t y = 0; y < height/4; y++)
+    for (uint16_t y = 0; y < height; y += 4)
     {
-        for (uint16_t x = 0; x < width/4; x++)
+        for (uint16_t x = 0; x < width; x += 4)
         {
-            if (false)
+            if (false) // TODO: Implement alpha images
             {
                 uint8_t decoded_alpha_block[64];
                 std::vector<uint8_t> alpha_block(compressed_data.begin()+offset, compressed_data.begin()+offset+8);
@@ -58,13 +58,15 @@ void ETC1Converter::Decode(std::vector<uint8_t> compressed_data, std::vector<uin
                 {
                     for (uint8_t byte = 0; byte < 4; byte++)
                     {
-                        uint32_t source_position = 4 * (decoded_block_x + decoded_block_y*4) + byte;
-                        uint32_t destination_position = ((y*4 + decoded_block_y) * width + x*4 + decoded_block_x)*4 + byte;
+                        uint32_t source_position = decoded_block_y*16 + decoded_block_x*4 + byte;
+                        uint32_t destination_position = ((y*4 + decoded_block_y) * width + ((x*4 + decoded_block_x)*4)) + byte;
+                        //uint32_t destination_position = y*width+decoded_block_y*width + x*4+decoded_block_x*4+byte;
 
                         decompressed_data[destination_position] = decoded_block[source_position];
                     }
                 }
             }
+            
             offset += 8; 
         }
     }
